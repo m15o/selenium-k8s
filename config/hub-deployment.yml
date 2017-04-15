@@ -1,0 +1,49 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: selenium-hub-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: selenium-hub-deployment
+    spec:
+      containers:
+      - name: selenium-hub
+        image: selenium/hub:3.3.1
+        ports:
+        - containerPort: 4444
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - "http://localhost:4444/grid/api/hub"
+            - "-O"
+            - "-"
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        # As integer, maps to "maxSession"
+        - name: GRID_MAX_SESSION
+          value: "5"
+        # In milliseconds, maps to "newSessionWaitTimeout"
+        - name: GRID_NEW_SESSION_WAIT_TIMEOUT
+          value: "-1"
+        # As a boolean, maps to "throwOnCapabilityNotPresent"
+        - name: GRID_THROW_ON_CAPABILITY_NOT_PRESENT
+          value: "true"
+        # As an integer
+        - name: GRID_JETTY_MAX_THREADS
+          value: "-1"
+        # In milliseconds, maps to "cleanUpCycle"
+        - name: GRID_CLEAN_UP_CYCLE
+          value: "5000"
+        # In seconds, maps to "browserTimeout"
+        - name: GRID_BROWSER_TIMEOUT
+          value: "0"
+        # In seconds, maps to "timeout"
+        - name: GRID_TIMEOUT
+          value: "30"
+        - name: GRID_DEBUG
+          value: "false"

@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: selenium-hub-service
+spec:
+  type: NodePort
+  selector:
+    app: selenium-hub-deployment
+  ports:
+    - protocol: TCP
+      port: 4444

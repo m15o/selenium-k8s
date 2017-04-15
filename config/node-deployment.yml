@@ -1,0 +1,62 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: selenium-node-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: selenium-node-deployment
+    spec:
+      containers:
+      - name: selenium-hub
+        image: selenium/node-chrome:3.3.1
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - "http://localhost:5555/wd/hub/status"
+            - "-O"
+            - "-"
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        # Hub addr
+        - name: HUB_PORT_4444_TCP_ADDR
+          value: selenium-hub-service
+        # Hub port
+        - name: HUB_PORT_4444_TCP_PORT
+          value: "4444"
+        - name: SCREEN_WIDTH
+          value: "1360"
+        - name: SCREEN_HEIGHT
+          value: "1020"
+        - name: SCREEN_DEPTH
+          value: 24"
+        - name: DISPLAY
+          value: ":99.0"
+        # As integer, maps to "maxInstances"
+        - name: NODE_MAX_INSTANCES
+          value: "1"
+        # As integer, maps to "maxSession"
+        - name: NODE_MAX_SESSION
+          value: "1"
+        # As integer, maps to "port"
+        - name: NODE_PORT
+          value: "5555"
+        # In milliseconds, maps to "registerCycle"
+        - name: NODE_REGISTER_CYCLE
+          value: "5000"
+        # In milliseconds, maps to "nodePolling"
+        - name: NODE_POLLING
+          value: "5000"
+        # In milliseconds, maps to "unregisterIfStillDownAfter"
+        - name: NODE_UNREGISTER_IF_STILL_DOWN_AFTER
+          value: "60000"
+        # As integer, maps to "downPollingLimit"
+        - name: NODE_DOWN_POLLING_LIMIT
+          value: "2"
+        # As string, maps to "applicationName"
+        - name: NODE_APPLICATION_NAME
+          value: ""
