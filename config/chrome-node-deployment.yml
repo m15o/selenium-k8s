@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: selenium-node-deployment
+  name: selenium-chrome-node-deployment
 spec:
   replicas: 2
   template:
